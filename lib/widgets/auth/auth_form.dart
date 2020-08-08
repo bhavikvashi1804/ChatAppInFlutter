@@ -6,6 +6,26 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
+  final _formKey = GlobalKey<FormState>();
+  var _isLogin = true;
+  String _userEmail = "";
+  String _userName = "";
+  String _userPassword = "";
+
+  void _trySubmit() {
+    final isValid = _formKey.currentState.validate();
+
+    FocusScope.of(context).unfocus();
+    //clears a focus
+    //means remove the keyboard targeting perticular field
+
+    if (isValid) {
+      _formKey.currentState.save();
+      //now this will triger on save
+      print(_userEmail);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -14,17 +34,49 @@ class _AuthFormState extends State<AuthForm> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Form(
+            key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  key: ValueKey('email'),
+                  validator: (value) {
+                    if (value.isEmpty || !value.contains('@')) {
+                      return 'Please enter valid Email Address';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _userEmail = newValue;
+                  },
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: 'Email Address'),
                 ),
+                if (!_isLogin)
+                  TextFormField(
+                    key: ValueKey('username'),
+                    validator: (value) {
+                      if (value.isEmpty || value.length < 4) {
+                        return 'Please enter username more than 4 character';
+                      }
+                      return null;
+                    },
+                    onSaved: (newValue) {
+                      _userName = newValue;
+                    },
+                    decoration: InputDecoration(labelText: 'User Name'),
+                  ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'User Name'),
-                ),
-                TextFormField(
+                  key: ValueKey('password'),
+                  validator: (value) {
+                    if (value.isEmpty || value.length < 7) {
+                      return 'Password must be atleast 7 Character long';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _userPassword = newValue;
+                  },
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true,
@@ -33,12 +85,18 @@ class _AuthFormState extends State<AuthForm> {
                   height: 12,
                 ),
                 RaisedButton(
-                  child: Text('Login'),
-                  onPressed: () {},
+                  child: _isLogin ? Text('Login') : Text('Sign Up'),
+                  onPressed: () => _trySubmit(),
                 ),
                 FlatButton(
-                  onPressed: () {},
-                  child: Text('Create new Account'),
+                  onPressed: () {
+                    setState(() {
+                      _isLogin = !_isLogin;
+                    });
+                  },
+                  child: _isLogin
+                      ? Text('Create new Account')
+                      : Text('Already have an account'),
                   textColor: Theme.of(context).primaryColor,
                 ),
               ],
