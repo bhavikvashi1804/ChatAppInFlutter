@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
+  final void Function(String email, String username, String password,
+      bool isLogin, BuildContext ctx) submitFN;
+
+  bool isLoading;
+
+  AuthForm(this.submitFN, this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -22,7 +28,13 @@ class _AuthFormState extends State<AuthForm> {
     if (isValid) {
       _formKey.currentState.save();
       //now this will triger on save
-      print(_userEmail);
+      widget.submitFN(
+        _userEmail.trim(),
+        _userName.trim(),
+        _userPassword.trim(),
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -84,21 +96,24 @@ class _AuthFormState extends State<AuthForm> {
                 SizedBox(
                   height: 12,
                 ),
-                RaisedButton(
-                  child: _isLogin ? Text('Login') : Text('Sign Up'),
-                  onPressed: () => _trySubmit(),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      _isLogin = !_isLogin;
-                    });
-                  },
-                  child: _isLogin
-                      ? Text('Create new Account')
-                      : Text('Already have an account'),
-                  textColor: Theme.of(context).primaryColor,
-                ),
+                if (widget.isLoading) CircularProgressIndicator(),
+                if (!widget.isLoading)
+                  RaisedButton(
+                    child: _isLogin ? Text('Login') : Text('Sign Up'),
+                    onPressed: () => _trySubmit(),
+                  ),
+                if (!widget.isLoading)
+                  FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
+                    child: _isLogin
+                        ? Text('Create new Account')
+                        : Text('Already have an account'),
+                    textColor: Theme.of(context).primaryColor,
+                  ),
               ],
             ),
           ),
