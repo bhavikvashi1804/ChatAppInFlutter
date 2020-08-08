@@ -27,6 +27,7 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 12,
@@ -38,6 +39,7 @@ class _AuthFormState extends State<AuthForm> {
                 FlatButton(
                   onPressed: () {},
                   child: Text('Create new Account'),
+                  textColor: Theme.of(context).primaryColor,
                 ),
               ],
             ),
