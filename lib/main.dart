@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
       title: 'Flutter Chat',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         backgroundColor: Colors.pink,
         accentColor: Colors.deepPurple,
