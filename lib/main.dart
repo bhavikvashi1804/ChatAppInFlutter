@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:chat_app_firebase/demo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 

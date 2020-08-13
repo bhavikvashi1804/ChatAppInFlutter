@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
+import '../picker/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(String email, String username, String password,
@@ -46,15 +47,6 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
-  void _imagePick() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      _pickedImage = File(pickedFile.path);
-      _imagePath = pickedFile.path;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -67,17 +59,7 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: kIsWeb
-                      ? _imagePath.length == 0 ? null : NetworkImage(_imagePath)
-                      : _pickedImage == null ? null : FileImage(_pickedImage),
-                ),
-                FlatButton.icon(
-                  onPressed: () => _imagePick(),
-                  icon: Icon(Icons.image),
-                  label: Text('Add Image'),
-                ),
+                if (!_isLogin) UserImagePicker(),
                 TextFormField(
                   key: ValueKey('email'),
                   validator: (value) {
