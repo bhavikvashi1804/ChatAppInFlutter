@@ -23,8 +23,8 @@ class _AuthFormState extends State<AuthForm> {
   String _userEmail = "";
   String _userName = "";
   String _userPassword = "";
-  File _pickedImage;
-  String _imagePath = "";
+  File _userImageFile;
+
   final picker = ImagePicker();
 
   void _trySubmit() {
@@ -33,6 +33,14 @@ class _AuthFormState extends State<AuthForm> {
     FocusScope.of(context).unfocus();
     //clears a focus
     //means remove the keyboard targeting perticular field
+
+    if (_userImageFile == null && !_isLogin) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Please Select your image'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+      return;
+    }
 
     if (isValid) {
       _formKey.currentState.save();
@@ -47,6 +55,10 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
+  void _pickImage(File pickedImage) {
+    _userImageFile = pickedImage;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -59,7 +71,7 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (!_isLogin) UserImagePicker(),
+                if (!_isLogin) UserImagePicker(_pickImage),
                 TextFormField(
                   key: ValueKey('email'),
                   validator: (value) {
