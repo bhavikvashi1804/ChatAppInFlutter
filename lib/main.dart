@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:chat_app_firebase/demo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,6 +16,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      print('App is running on web');
+    } else if (Platform.isAndroid) {
+      print('App is running on android');
+    }
     return MaterialApp(
       title: 'Flutter Chat',
       theme: ThemeData(
@@ -27,6 +36,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      //   home: MyApp1(),
+      // );
+
       home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (ctx, userSS) {
