@@ -8,7 +8,7 @@ import '../picker/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(String email, String username, String password,
-      bool isLogin, BuildContext ctx) submitFN;
+      File image, bool isLogin, BuildContext ctx) submitFN;
 
   final bool isLoading;
 
@@ -49,6 +49,7 @@ class _AuthFormState extends State<AuthForm> {
         _userEmail.trim(),
         _userName.trim(),
         _userPassword.trim(),
+        _userImageFile,
         _isLogin,
         context,
       );

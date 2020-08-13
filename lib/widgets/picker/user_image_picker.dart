@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,9 +31,8 @@ class _UserImagePickerState extends State<UserImagePicker> {
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundImage: kIsWeb
-              ? _imagePath.length == 0 ? null : NetworkImage(_imagePath)
-              : _pickedImage == null ? null : FileImage(_pickedImage),
+          backgroundImage:
+              _pickedImage == null ? null : FileImage(_pickedImage),
         ),
         FlatButton.icon(
           onPressed: () => _imagePick(),

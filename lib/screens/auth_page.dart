@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final auth = FirebaseAuth.instance;
   bool _isLoading = false;
   void _submitAuthData(String email, String username, String password,
-      bool isLogin, BuildContext ctx) async {
+      File image, bool isLogin, BuildContext ctx) async {
     AuthResult authResult;
 
     try {
@@ -32,6 +35,14 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('userImages')
+            .child(authResult.user.uid + '.jpg');
+
+        await ref.putFile(image).onComplete;
+
         await Firestore.instance
             .collection('users')
             .document(authResult.user.uid)
